@@ -43,6 +43,23 @@ namespace BaseCSharpTasks
         // Input
         Console.Write("Enter number x (x >= 100): ");
         inputNumber = Console.ReadLine();
+
+        // Calculations
+        // Extract second digit
+        secondDigit = inputNumber[1];
+
+        // Remove second digit
+        numberWithoutSecondDigit = inputNumber.Remove(1, 1);
+
+        // Append removed digit to the end
+        finalNumber = numberWithoutSecondDigit + secondDigit;
+
+        // Block: output
+        Console.WriteLine();
+        Console.WriteLine("Result after transformation:");
+        Console.WriteLine("n = " + finalNumber);
+
+        Console.ReadLine();
     }
   }
 }
