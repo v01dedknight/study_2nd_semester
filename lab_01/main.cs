@@ -31,6 +31,18 @@ namespace BaseCSharpTasks
         Console.WriteLine("Result of a^n calculation:");
         Console.WriteLine(baseNumber + "^" + powerValue + " = " + powerResult);
         Console.WriteLine();
+
+        // Task 2: Remove second digit and append it to the end
+
+        // Variable declaration
+        string inputNumber;
+        char secondDigit;
+        string numberWithoutSecondDigit;
+        string finalNumber;
+
+        // Input
+        Console.Write("Enter number x (x >= 100): ");
+        inputNumber = Console.ReadLine();
     }
   }
 }
