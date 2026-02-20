@@ -1,0 +1,11 @@
+[Bb]in/
+[Ob]j/
+.vscode/
+*.code-workspace
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+.DS_Store
+Thumbs.db
+TestResults/
