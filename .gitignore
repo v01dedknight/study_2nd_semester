@@ -1,16 +1,16 @@
+# Build folders
 [Bb]in/
 [Oo]bj/
-*/[Bb]in/
-*/[Oo]bj/
-.vscode/
-*.code-workspace
+TestResults/
+
+# Visual Studio / VS Code
 .vs/
+.vscode/
 *.user
 *.userosscache
 *.sln.docstates
+*.code-workspace
+
+# System files
 .DS_Store
 Thumbs.db
-TestResults/
-*.sln
-*.slnx
-*.csproj
