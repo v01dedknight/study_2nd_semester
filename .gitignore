@@ -1,5 +1,7 @@
 [Bb]in/
-[Ob]j/
+[Oo]bj/
+*/[Bb]in/
+*/[Oo]bj/
 .vscode/
 *.code-workspace
 .vs/
