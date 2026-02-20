@@ -1,9 +1,9 @@
-﻿namespace lab_02;
+﻿using System;
 
-class Program
-{
-    static void Main(string[] args)
-    {
-        Console.WriteLine("Hello, World!");
+namespace ZooProject {
+  class Program {
+    static void Main(string[] args) {
+      Console.WriteLine("Zoo Project Initialized.");
     }
+  }
 }
