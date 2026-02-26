@@ -114,6 +114,7 @@ namespace MatrixCalculator {
       return resultMatrix;
     }
 
+    // BOOLEAN OPERATORS
     public static bool operator >(SquareMatrix firstMatrix, SquareMatrix secondMatrix) {
       return firstMatrix.GetDeterminant() > secondMatrix.GetDeterminant();
     }
@@ -314,12 +315,67 @@ namespace MatrixCalculator {
     }
   }
 
-  // PROGRAM START
+  // TEST APPLICATION
   class Program {
     static void Main(string[] args) {
-      // INITIALIZATION BLOCK
-      Console.WriteLine("System: Logic and Prototype pattern fully implemented.");
-      Console.WriteLine("Ready for UI integration.");
+      try {
+        // DECLARATION BLOCK
+        int matrixSize;
+        SquareMatrix firstMatrix;
+        SquareMatrix secondMatrix;
+        SquareMatrix sumResult;
+        int loopCounter;
+        const int MAX_ITERATIONS = 2;
+        string outputTemplate;
+
+        // INPUT BLOCK
+        Console.WriteLine("=== Matrix Calculator ===");
+        Console.Write("Enter matrix size: ");
+        matrixSize = int.Parse(Console.ReadLine());
+
+        // INITIALIZATION
+        firstMatrix = new SquareMatrix(matrixSize, 1, 10);
+        secondMatrix = new SquareMatrix(matrixSize, 1, 5);
+
+        // CALCULATION BLOCK
+        sumResult = firstMatrix + secondMatrix;
+
+        // OUTPUT BLOCK 1
+        outputTemplate = $"\nMatrix A:\n{firstMatrix}" +
+                         $"Matrix B:\n{secondMatrix}" +
+                         $"Sum A + B:\n{sumResult}" +
+                         $"Determinant of A: {firstMatrix.GetDeterminant():F2}\n";
+
+        Console.WriteLine(outputTemplate);
+
+        // DEMONSTRATING DIFFERENT LOOPS
+        loopCounter = 0;
+
+        // While loop demonstration
+        Console.WriteLine("Processing iterations (While):");
+        while (loopCounter < MAX_ITERATIONS) {
+          Console.WriteLine($"Iteration step: {loopCounter}");
+          loopCounter++;
+        }
+
+        // Do-while loop demonstration
+        loopCounter = 0;
+        Console.WriteLine("\nProcessing iterations (Do-While):");
+        do {
+          Console.WriteLine($"Step recorded: {loopCounter}");
+          loopCounter++;
+        }
+        while (loopCounter < MAX_ITERATIONS);
+
+      } catch (MatrixException matrixError) {
+        Console.WriteLine($"Matrix error occurred: {matrixError.Message}");
+      } catch (Exception generalError) {
+        Console.WriteLine($"System error: {generalError.Message}");
+      }
+
+      // Final output
+      Console.WriteLine("\nSimulation finished. Press any key to exit...");
+      Console.ReadKey();
     }
   }
 }
