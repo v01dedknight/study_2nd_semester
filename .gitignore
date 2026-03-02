@@ -1,16 +1,17 @@
-# Build folders
+# Assembly
 [Bb]in/
 [Oo]bj/
 TestResults/
 
-# Visual Studio / VS Code
+# Visual Studio
 .vs/
 .vscode/
 *.user
 *.userosscache
 *.sln.docstates
 *.code-workspace
+*.suo
 
-# System files
+# System
 .DS_Store
 Thumbs.db
