@@ -1,34 +1,40 @@
 ﻿using System;
 
-public class SquareMatrix : IMyCloneable, IComparable<SquareMatrix> {
-  private double[,] matrixData;
-  private int matrixSize;
+public double GetDeterminant() {
+  return CalculateDeterminantRecursive(this.matrixData, this.matrixSize);
+}
 
-  public SquareMatrix(int size) {
-    if (size <= 0) {
-      throw new MatrixException("Size must be greater than zero.");
+private double CalculateDeterminantRecursive(double[,] data, int size) {
+  if (size == 1) { return data[0, 0]; }
+
+  // DECLARATION BLOCK
+  double determinantResult;
+  double sign;
+  double[,] minorData;
+
+  determinantResult = 0.0;
+
+  // CALCULATION BLOCK
+  for (int columnIndex = 0; columnIndex < size; columnIndex++) {
+    sign = Math.Pow(-1.0, (double)columnIndex);
+    minorData = GetMinor(data, 0, columnIndex, size);
+    determinantResult += sign * data[0, columnIndex] * CalculateDeterminantRecursive(minorData, size - 1);
+  }
+  return determinantResult;
+}
+
+private double[,] GetMinor(double[,] data, int excludedRow, int excludedColumn, int size) {
+  double[,] minorData = new double[size - 1, size - 1];
+  int minorRow = 0;
+  for (int rowIndex = 0; rowIndex < size; rowIndex++) {
+    if (rowIndex == excludedRow) continue;
+    int minorColumn = 0;
+    for (int columnIndex = 0; columnIndex < size; columnIndex++) {
+      if (columnIndex == excludedColumn) continue;
+      minorData[minorRow, minorColumn] = data[rowIndex, columnIndex];
+      minorColumn++;
     }
-    matrixSize = size;
-    matrixData = new double[size, size];
+    minorRow++;
   }
-
-  public SquareMatrix(int size, int minValue, int maxValue) : this(size) {
-    // DECLARATION BLOCK
-    Random randomGenerator;
-    randomGenerator = new Random();
-
-    // CALCULATION BLOCK
-    for (int rowIndex = 0; rowIndex < size; rowIndex++) {
-      for (int columnIndex = 0; columnIndex < size; columnIndex++) {
-        matrixData[rowIndex, columnIndex] = (double)randomGenerator.Next(minValue, maxValue);
-      }
-    }
-  }
-
-  public int Size { get { return matrixSize; } }
-
-  public double this[int rowIndex, int columnIndex] {
-    get { return matrixData[rowIndex, columnIndex]; }
-    set { matrixData[rowIndex, columnIndex] = value; }
-  }
+  return minorData;
 }
