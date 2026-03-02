@@ -114,6 +114,7 @@ namespace MatrixCalculator {
       return resultMatrix;
     }
 
+    // BOOLEAN OPERATORS (Using Determinant for Comparison)
     public static bool operator >(SquareMatrix firstMatrix, SquareMatrix secondMatrix) {
       return firstMatrix.GetDeterminant() > secondMatrix.GetDeterminant();
     }
@@ -165,6 +166,7 @@ namespace MatrixCalculator {
       return !(firstMatrix == secondMatrix);
     }
 
+    // TRUE/FALSE OPERATORS (True if non-singular)
     public static bool operator true(SquareMatrix matrix) {
       return Math.Abs(matrix.GetDeterminant()) > EPSILON;
     }
@@ -173,6 +175,7 @@ namespace MatrixCalculator {
       return Math.Abs(matrix.GetDeterminant()) <= EPSILON;
     }
 
+    // TYPE CASTING (Explicitly to double returns determinant)
     public static explicit operator double(SquareMatrix matrix) {
       return matrix.GetDeterminant();
     }
@@ -257,6 +260,7 @@ namespace MatrixCalculator {
         for (int columnIndex = 0; columnIndex < matrixSize; columnIndex++) {
           minor = GetMinor(this.matrixData, rowIndex, columnIndex, matrixSize);
           cofactor = Math.Pow(-1.0, (double)(rowIndex + columnIndex)) * CalculateDeterminantRecursive(minor, matrixSize - 1);
+          // Transpose for adjugate
           adjugateMatrix[columnIndex, rowIndex] = cofactor / determinant;
         }
       }
@@ -314,50 +318,67 @@ namespace MatrixCalculator {
     }
   }
 
-  // PROGRAM START
+  // TEST APPLICATION
   class Program {
     static void Main(string[] args) {
-      // INITIALIZATION BLOCK
-      Console.WriteLine("System: Logic and Prototype pattern fully implemented.");
-      Console.WriteLine("Ready for UI integration.");
+      try {
+        // DECLARATION BLOCK
+        int matrixSize;
+        SquareMatrix firstMatrix;
+        SquareMatrix secondMatrix;
+        SquareMatrix sumResult;
+        int loopCounter;
+        const int MAX_ITERATIONS = 2;
+
+        // INPUT BLOCK
+        Console.WriteLine("=== Matrix Calculator ===");
+        Console.Write("Enter matrix size: ");
+        matrixSize = int.Parse(Console.ReadLine());
+
+        // INITIALIZATION
+        firstMatrix = new SquareMatrix(matrixSize, 1, 10);
+        secondMatrix = new SquareMatrix(matrixSize, 1, 5);
+
+        // OUTPUT BLOCK 1
+        Console.WriteLine("\nMatrix A:");
+        Console.WriteLine(firstMatrix.ToString());
+        Console.WriteLine("Matrix B:");
+        Console.WriteLine(secondMatrix.ToString());
+
+        // CALCULATION BLOCK
+        sumResult = firstMatrix + secondMatrix;
+
+        // OUTPUT BLOCK 2
+        Console.WriteLine("Sum A + B:");
+        Console.WriteLine(sumResult.ToString());
+        Console.WriteLine($"Determinant of A: {firstMatrix.GetDeterminant():F2}");
+
+        // DEMONSTRATING DIFFERENT LOOPS (Rule 11 Adaptation)
+        loopCounter = 0;
+
+        // While loop demonstration
+        Console.WriteLine("Processing iterations (While):");
+        while (loopCounter < MAX_ITERATIONS) {
+          Console.WriteLine($"Iteration step: {loopCounter}");
+          loopCounter++;
+        }
+
+        // Do-while loop demonstration
+        loopCounter = 0;
+        Console.WriteLine("\nProcessing iterations (Do-While):");
+        do {
+          Console.WriteLine($"Step recorded: {loopCounter}");
+          loopCounter++;
+        } while (loopCounter < MAX_ITERATIONS);
+
+      } catch (MatrixException matrixError) {
+        Console.WriteLine($"Matrix error occurred: {matrixError.Message}");
+      } catch (Exception generalError) {
+        Console.WriteLine($"System error: {generalError.Message}");
+      }
+
+      Console.WriteLine("\nPress any key to exit...");
+      Console.ReadKey();
     }
   }
-
-public double GetDeterminant() {
-  return CalculateDeterminantRecursive(this.matrixData, this.matrixSize);
-}
-
-private double CalculateDeterminantRecursive(double[,] data, int size) {
-  if (size == 1) { return data[0, 0]; }
-
-  // DECLARATION BLOCK
-  double determinantResult;
-  double sign;
-  double[,] minorData;
-
-  determinantResult = 0.0;
-
-  // CALCULATION BLOCK
-  for (int columnIndex = 0; columnIndex < size; columnIndex++) {
-    sign = Math.Pow(-1.0, (double)columnIndex);
-    minorData = GetMinor(data, 0, columnIndex, size);
-    determinantResult += sign * data[0, columnIndex] * CalculateDeterminantRecursive(minorData, size - 1);
-  }
-  return determinantResult;
-}
-
-private double[,] GetMinor(double[,] data, int excludedRow, int excludedColumn, int size) {
-  double[,] minorData = new double[size - 1, size - 1];
-  int minorRow = 0;
-  for (int rowIndex = 0; rowIndex < size; rowIndex++) {
-    if (rowIndex == excludedRow) continue;
-    int minorColumn = 0;
-    for (int columnIndex = 0; columnIndex < size; columnIndex++) {
-      if (columnIndex == excludedColumn) continue;
-      minorData[minorRow, minorColumn] = data[rowIndex, columnIndex];
-      minorColumn++;
-    }
-    minorRow++;
-  }
-  return minorData;
 }
