@@ -1,11 +1,17 @@
+# Assembly
 [Bb]in/
-[Ob]j/
-.vscode/
-*.code-workspace
+[Oo]bj/
+TestResults/
+
+# Visual Studio
 .vs/
+.vscode/
 *.user
 *.userosscache
 *.sln.docstates
+*.code-workspace
+*.suo
+
+# System
 .DS_Store
 Thumbs.db
-TestResults/
