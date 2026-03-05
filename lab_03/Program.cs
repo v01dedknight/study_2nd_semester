@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text;
 
 namespace MatrixCalculator {
@@ -114,7 +114,7 @@ namespace MatrixCalculator {
       return resultMatrix;
     }
 
-    // BOOLEAN OPERATORS (Using Determinant for Comparison)
+    // BOOLEAN OPERATORS
     public static bool operator >(SquareMatrix firstMatrix, SquareMatrix secondMatrix) {
       return firstMatrix.GetDeterminant() > secondMatrix.GetDeterminant();
     }
@@ -166,7 +166,6 @@ namespace MatrixCalculator {
       return !(firstMatrix == secondMatrix);
     }
 
-    // TRUE/FALSE OPERATORS (True if non-singular)
     public static bool operator true(SquareMatrix matrix) {
       return Math.Abs(matrix.GetDeterminant()) > EPSILON;
     }
@@ -175,7 +174,6 @@ namespace MatrixCalculator {
       return Math.Abs(matrix.GetDeterminant()) <= EPSILON;
     }
 
-    // TYPE CASTING (Explicitly to double returns determinant)
     public static explicit operator double(SquareMatrix matrix) {
       return matrix.GetDeterminant();
     }
@@ -260,7 +258,6 @@ namespace MatrixCalculator {
         for (int columnIndex = 0; columnIndex < matrixSize; columnIndex++) {
           minor = GetMinor(this.matrixData, rowIndex, columnIndex, matrixSize);
           cofactor = Math.Pow(-1.0, (double)(rowIndex + columnIndex)) * CalculateDeterminantRecursive(minor, matrixSize - 1);
-          // Transpose for adjugate
           adjugateMatrix[columnIndex, rowIndex] = cofactor / determinant;
         }
       }
@@ -329,6 +326,7 @@ namespace MatrixCalculator {
         SquareMatrix sumResult;
         int loopCounter;
         const int MAX_ITERATIONS = 2;
+        string outputTemplate;
 
         // INPUT BLOCK
         Console.WriteLine("=== Matrix Calculator ===");
@@ -339,21 +337,18 @@ namespace MatrixCalculator {
         firstMatrix = new SquareMatrix(matrixSize, 1, 10);
         secondMatrix = new SquareMatrix(matrixSize, 1, 5);
 
-        // OUTPUT BLOCK 1
-        Console.WriteLine("\nMatrix A:");
-        Console.WriteLine(firstMatrix.ToString());
-        Console.WriteLine("Matrix B:");
-        Console.WriteLine(secondMatrix.ToString());
-
         // CALCULATION BLOCK
         sumResult = firstMatrix + secondMatrix;
 
-        // OUTPUT BLOCK 2
-        Console.WriteLine("Sum A + B:");
-        Console.WriteLine(sumResult.ToString());
-        Console.WriteLine($"Determinant of A: {firstMatrix.GetDeterminant():F2}");
+        // OUTPUT BLOCK 1
+        outputTemplate = $"\nMatrix A:\n{firstMatrix}" +
+                         $"Matrix B:\n{secondMatrix}" +
+                         $"Sum A + B:\n{sumResult}" +
+                         $"Determinant of A: {firstMatrix.GetDeterminant():F2}\n";
 
-        // DEMONSTRATING DIFFERENT LOOPS (Rule 11 Adaptation)
+        Console.WriteLine(outputTemplate);
+
+        // DEMONSTRATING DIFFERENT LOOPS
         loopCounter = 0;
 
         // While loop demonstration
@@ -369,7 +364,8 @@ namespace MatrixCalculator {
         do {
           Console.WriteLine($"Step recorded: {loopCounter}");
           loopCounter++;
-        } while (loopCounter < MAX_ITERATIONS);
+        }
+        while (loopCounter < MAX_ITERATIONS);
 
       } catch (MatrixException matrixError) {
         Console.WriteLine($"Matrix error occurred: {matrixError.Message}");
@@ -377,7 +373,8 @@ namespace MatrixCalculator {
         Console.WriteLine($"System error: {generalError.Message}");
       }
 
-      Console.WriteLine("\nPress any key to exit...");
+      // Final output
+      Console.WriteLine("\nSimulation finished. Press any key to exit...");
       Console.ReadKey();
     }
   }
