@@ -7,65 +7,72 @@ namespace TextEditorLab {
   public class TextDocument {
     public string fileName { get; set; }
     public string content { get; set; }
+    public TextDocument() { content = string.Empty; fileName = "doc.txt"; }
+    public TextDocument(string n, string t) { fileName = n; content = t; }
+    public void SaveToXml(string p) {
+      XmlSerializer s = new XmlSerializer(typeof(TextDocument));
+      using (FileStream fs = new FileStream(p, FileMode.Create)) s.Serialize(fs, this);
+    }
+    public static TextDocument LoadFromXml(string p) {
+      XmlSerializer s = new XmlSerializer(typeof(TextDocument));
+      using (FileStream fs = new FileStream(p, FileMode.Open)) return (TextDocument)s.Deserialize(fs);
+    }
+    public void SaveToBinary(string p) {
+      using (BinaryWriter w = new BinaryWriter(File.Open(p, FileMode.Create))) { w.Write(fileName); w.Write(content); }
+    }
+    public static TextDocument LoadFromBinary(string p) {
+      using (BinaryReader r = new BinaryReader(File.Open(p, FileMode.Open))) return new TextDocument(r.ReadString(), r.ReadString());
+    }
+  }
 
-    public TextDocument() {
-      fileName = "Untitled.txt";
-      content = string.Empty;
+  // Memento object to store state
+  public class EditorMemento {
+    public string savedContent { get; }
+    public EditorMemento(string text) { savedContent = text; }
+  }
+
+  public class ConsoleEditor {
+    private TextDocument _doc;
+    private Stack<EditorMemento> _history;
+
+    public ConsoleEditor() {
+      _doc = new TextDocument();
+      _history = new Stack<EditorMemento>();
     }
 
-    public TextDocument(string name, string text) {
-      fileName = name;
-      content = text;
-    }
+    public void Start() {
+      bool active;
+      string cmd;
 
-    // Standard XML serialization
-    public void SaveToXml(string path) {
-      XmlSerializer serializer;
-      serializer = new XmlSerializer(typeof(TextDocument));
+      active = true;
 
-      using (FileStream stream = new FileStream(path, FileMode.Create)) {
-        serializer.Serialize(stream, this);
-      }
-    }
+      while (active) {
+        Console.Clear();
+        Console.WriteLine($"Editing: {_doc.fileName}\nContent: {_doc.content}");
+        Console.WriteLine("1: Add 2: Undo 3: SaveXML 0: Back");
+        cmd = Console.ReadLine();
 
-    public static TextDocument LoadFromXml(string path) {
-      XmlSerializer serializer;
-      serializer = new XmlSerializer(typeof(TextDocument));
-
-      using (FileStream stream = new FileStream(path, FileMode.Open)) {
-        return (TextDocument)serializer.Deserialize(stream);
-      }
-    }
-
-    // Manual Binary serialization for better control
-    public void SaveToBinary(string path) {
-      using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.Create))) {
-        writer.Write(fileName);
-        writer.Write(content);
-      }
-    }
-
-    public static TextDocument LoadFromBinary(string path) {
-      string name;
-      string text;
-
-      using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open))) {
-        name = reader.ReadString();
-        text = reader.ReadString();
-        return new TextDocument(name, text);
+        if (cmd == "1") {
+          string input;
+          _history.Push(new EditorMemento(_doc.content));
+          Console.Write("Text: ");
+          input = Console.ReadLine();
+          _doc.content += input;
+        } else if (cmd == "2" && _history.Count > 0) {
+          _doc.content = _history.Pop().savedContent;
+        } else if (cmd == "3") {
+          _doc.SaveToXml("autosave.xml");
+        } else if (cmd == "0") {
+          active = false;
+        }
       }
     }
   }
 
   class Program {
     static void Main(string[] args) {
-      bool isRunning;
-      isRunning = true;
-
-      while (isRunning) {
-        Console.WriteLine("Menu stub...");
-        isRunning = false;
-      }
+      ConsoleEditor editor = new ConsoleEditor();
+      editor.Start();
     }
   }
 }
