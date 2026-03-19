@@ -14,4 +14,4 @@ Each laboratory work is organized into its own directory containing the source c
 The development process follows a specific branching strategy:
 1. **dev**: Primary development branch.
 2. **test**: Review branch for Team Lead approval.
-3. **main**: Production branch for final submission and instructor grading.
+3. **main**: Production branch for final submission and instructor grading
